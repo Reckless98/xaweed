@@ -7,6 +7,7 @@ import { fadeInUp } from "@/lib/animations";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { getProductInquiryUrl } from "@/lib/line";
+import { useI18n } from "@/lib/i18n";
 import type { Product } from "@/types";
 
 interface ProductCardProps {
@@ -21,6 +22,7 @@ const strainColors: Record<string, "green" | "gold" | "red"> = {
 };
 
 export function ProductCard({ product, index = 0 }: ProductCardProps) {
+  const { t } = useI18n();
   return (
     <motion.div
       variants={fadeInUp}
@@ -47,7 +49,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
                 {product.strain}
               </Badge>
             )}
-            {product.featured && <Badge variant="gold">Featured</Badge>}
+            {product.featured && <Badge variant="gold">{t("products.featured")}</Badge>}
           </div>
 
           {/* Price overlay */}
@@ -95,7 +97,7 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
                 </svg>
               }
             >
-              Inquire on LINE
+              {t("products.inquire")}
             </Button>
           </div>
         </div>

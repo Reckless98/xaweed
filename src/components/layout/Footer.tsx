@@ -1,10 +1,20 @@
+"use client";
+
 import Image from "next/image";
-import { navigation } from "@/data/site";
 import { lineConfig } from "@/lib/line";
 import { contactInfo } from "@/data/content";
+import { useI18n } from "@/lib/i18n";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
+  const { t } = useI18n();
+
+  const navKeys = [
+    { href: "/", label: t("nav.home") },
+    { href: "/products", label: t("nav.menu") },
+    { href: "/about", label: t("nav.about") },
+    { href: "/contact", label: t("nav.contact") },
+  ];
 
   return (
     <footer className="relative border-t border-brand-ash/10">
@@ -23,8 +33,7 @@ export function Footer() {
               </span>
             </div>
             <p className="text-brand-cream/40 text-sm max-w-sm leading-relaxed">
-              Premium cannabis, fresh strains daily, pre-rolls &amp; accessories.
-              Chill vibes and friendly service in Nonthaburi.
+              {t("footer.description")}
             </p>
             <div className="mt-4 flex items-center gap-3">
               <a
@@ -67,10 +76,10 @@ export function Footer() {
           {/* Navigation */}
           <div>
             <h4 className="text-sm font-semibold text-brand-ivory mb-4 uppercase tracking-wider">
-              Navigation
+              {t("footer.navigation")}
             </h4>
             <ul className="space-y-2">
-              {navigation.map((item) => (
+              {navKeys.map((item) => (
                 <li key={item.href}>
                   <a
                     href={item.href}
@@ -86,7 +95,7 @@ export function Footer() {
           {/* Contact */}
           <div>
             <h4 className="text-sm font-semibold text-brand-ivory mb-4 uppercase tracking-wider">
-              Contact
+              {t("footer.contact")}
             </h4>
             <ul className="space-y-2 text-sm text-brand-cream/40">
               <li>{contactInfo.phone}</li>
@@ -102,7 +111,7 @@ export function Footer() {
         {/* Bottom */}
         <div className="mt-16 pt-8 border-t border-brand-ash/10 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-brand-cream/20">
-            &copy; {currentYear} Xaweed Shop. All rights reserved.
+            &copy; {currentYear} Xaweed Shop. {t("footer.rights")}
           </p>
           <p className="text-xs text-brand-cream/15">
             Nonthaburi, Thailand

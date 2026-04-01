@@ -6,11 +6,13 @@ import { fadeInUp, staggerContainer } from "@/lib/animations";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { featuredProducts } from "@/data/products";
+import { useI18n } from "@/lib/i18n";
 
 export function FeaturedProductsSection() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
+  const { t } = useI18n();
 
   const checkScroll = () => {
     const el = scrollRef.current;
@@ -41,8 +43,8 @@ export function FeaturedProductsSection() {
 
       <div className="relative z-10 max-w-7xl mx-auto px-6">
         <SectionHeading
-          title="Current Strains"
-          subtitle="Hand-selected premium flowers & edibles, updated daily. Swipe to explore."
+          title={t("featured.title")}
+          subtitle={t("featured.subtitle")}
         />
 
         {/* Slider container */}
@@ -51,7 +53,7 @@ export function FeaturedProductsSection() {
           {canScrollLeft && (
             <button
               onClick={() => scroll("left")}
-              className="absolute -left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full glass flex items-center justify-center text-brand-ivory hover:text-brand-green hover:glow-green transition-all opacity-0 group-hover:opacity-100"
+              className="absolute -left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full glass flex items-center justify-center text-brand-ivory hover:text-brand-green hover:glow-green transition-all sm:opacity-0 sm:group-hover:opacity-100"
               aria-label="Scroll left"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -62,7 +64,7 @@ export function FeaturedProductsSection() {
           {canScrollRight && (
             <button
               onClick={() => scroll("right")}
-              className="absolute -right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full glass flex items-center justify-center text-brand-ivory hover:text-brand-green hover:glow-green transition-all opacity-0 group-hover:opacity-100"
+              className="absolute -right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full glass flex items-center justify-center text-brand-ivory hover:text-brand-green hover:glow-green transition-all sm:opacity-0 sm:group-hover:opacity-100"
               aria-label="Scroll right"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -106,7 +108,7 @@ export function FeaturedProductsSection() {
             <svg className="w-4 h-4 animate-bob" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
             </svg>
-            Swipe to see more
+            {t("featured.swipeHint")}
           </span>
         </div>
       </div>

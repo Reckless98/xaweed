@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { fadeInUp } from "@/lib/animations";
+import { useI18n, type TranslationKey } from "@/lib/i18n";
 import type { Category } from "@/types";
 
 interface CategoryCardProps {
@@ -11,6 +12,13 @@ interface CategoryCardProps {
 }
 
 export function CategoryCard({ category, index = 0 }: CategoryCardProps) {
+  const { t, locale } = useI18n();
+
+  const nameKey = `category.${category.id}` as TranslationKey;
+  const descKey = `category.${category.id}.desc` as TranslationKey;
+  const localName = t(nameKey) !== nameKey ? t(nameKey) : category.name;
+  const localDesc = t(descKey) !== descKey ? t(descKey) : category.description;
+
   return (
     <motion.div
       variants={fadeInUp}
@@ -31,14 +39,14 @@ export function CategoryCard({ category, index = 0 }: CategoryCardProps) {
         {/* Content overlay */}
         <div className="absolute inset-0 flex flex-col justify-end p-5">
           <h3 className="text-xl font-bold text-brand-ivory font-display group-hover:text-brand-green transition-colors">
-            {category.name}
+            {localName}
           </h3>
           <p className="mt-1 text-sm text-brand-cream/50 group-hover:text-brand-cream/70 transition-colors">
-            {category.description}
+            {localDesc}
           </p>
           <div className="mt-2 flex items-center gap-2">
             <span className="text-xs text-brand-green font-medium">
-              {category.productCount} products
+              {category.productCount} {locale === "th" ? "สินค้า" : "products"}
             </span>
             <motion.span
               className="text-brand-green text-sm"

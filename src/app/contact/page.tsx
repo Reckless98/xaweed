@@ -5,8 +5,8 @@ import { ContactSection } from "@/components/sections/ContactSection";
 import { LineFloatingButton } from "@/components/ui/LineFloatingButton";
 
 export const metadata: Metadata = {
-  title: "Contact",
-  description: "Visit Xaweed Shop in Nonthaburi or reach us on LINE. Open daily 12:00-22:00.",
+  title: "ติดต่อเรา | Xaweed Shop",
+  description: "เยี่ยมชม Xaweed Shop จ.นนทบุรี หรือติดต่อเราผ่าน LINE เปิดทุกวัน 12:00-22:00",
 };
 
 export default function ContactPage() {

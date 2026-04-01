@@ -7,16 +7,19 @@ import { GlassCard } from "@/components/ui/GlassCard";
 import { Button } from "@/components/ui/Button";
 import { contactInfo } from "@/data/content";
 import { lineConfig } from "@/lib/line";
+import { useI18n } from "@/lib/i18n";
 
 export function ContactSection() {
+  const { t, locale } = useI18n();
+
   return (
     <section id="contact" className="relative py-24 sm:py-32">
       <div className="absolute inset-0 bg-brand-obsidian/30" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6">
         <SectionHeading
-          title="Visit Us"
-          subtitle="Come chill, browse strains, and enjoy the vibe."
+          title={t("contact.title")}
+          subtitle={t("contact.subtitle")}
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -29,7 +32,7 @@ export function ContactSection() {
           >
             <GlassCard padding="lg" className="h-full">
               <h3 className="text-2xl font-bold text-brand-ivory font-display mb-6">
-                Xaweed Shop
+                {t("contact.shopName")}
               </h3>
 
               <div className="space-y-5">
@@ -42,12 +45,12 @@ export function ContactSection() {
                     </svg>
                   </div>
                   <div>
-                    <p className="text-brand-ivory text-sm font-medium">Address</p>
+                    <p className="text-brand-ivory text-sm font-medium">{t("contact.address")}</p>
                     <p className="text-brand-cream/50 text-sm mt-0.5">
-                      {contactInfo.address}
+                      {locale === "th" ? contactInfo.addressThai : contactInfo.address}
                     </p>
                     <p className="text-brand-cream/30 text-xs mt-0.5">
-                      {contactInfo.addressThai}
+                      {locale === "th" ? contactInfo.address : contactInfo.addressThai}
                     </p>
                   </div>
                 </div>
@@ -60,9 +63,9 @@ export function ContactSection() {
                     </svg>
                   </div>
                   <div>
-                    <p className="text-brand-ivory text-sm font-medium">Hours</p>
+                    <p className="text-brand-ivory text-sm font-medium">{t("contact.hours")}</p>
                     <p className="text-brand-cream/50 text-sm mt-0.5">
-                      Daily 12:00 – 22:00
+                      {t("contact.hoursValue")}
                     </p>
                   </div>
                 </div>
@@ -75,7 +78,7 @@ export function ContactSection() {
                     </svg>
                   </div>
                   <div>
-                    <p className="text-brand-ivory text-sm font-medium">Phone</p>
+                    <p className="text-brand-ivory text-sm font-medium">{t("contact.phone")}</p>
                     <p className="text-brand-cream/50 text-sm mt-0.5">
                       {contactInfo.phone}
                     </p>
@@ -99,16 +102,26 @@ export function ContactSection() {
 
                 {/* Amenities */}
                 <div className="pt-4 border-t border-brand-ash/20">
-                  <p className="text-brand-ivory text-sm font-medium mb-3">Amenities</p>
+                  <p className="text-brand-ivory text-sm font-medium mb-3">{t("contact.amenities")}</p>
                   <div className="flex flex-wrap gap-2">
-                    {contactInfo.amenities.map((amenity) => (
-                      <span
-                        key={amenity}
-                        className="text-xs px-3 py-1 rounded-full bg-brand-smoke text-brand-cream/50"
-                      >
-                        {amenity}
-                      </span>
-                    ))}
+                    {contactInfo.amenities.map((amenity) => {
+                      const amenityKeyMap: Record<string, string> = {
+                        "Private rooms available": "amenity.privateRooms",
+                        "Free Wi-Fi": "amenity.wifi",
+                        "Parking available": "amenity.parking",
+                        "Smoking OK": "amenity.smoking",
+                        "Power outlets available": "amenity.power",
+                      };
+                      const key = amenityKeyMap[amenity];
+                      return (
+                        <span
+                          key={amenity}
+                          className="text-xs px-3 py-1 rounded-full bg-brand-smoke text-brand-cream/50"
+                        >
+                          {key ? t(key as import("@/lib/i18n").TranslationKey) : amenity}
+                        </span>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
@@ -121,7 +134,7 @@ export function ContactSection() {
                   external
                   className="flex-1"
                 >
-                  Chat on LINE
+                  {t("hero.chatLine")}
                 </Button>
                 <Button
                   variant="secondary"
@@ -129,7 +142,7 @@ export function ContactSection() {
                   external
                   className="flex-1"
                 >
-                  Get Directions
+                  {t("contact.getDirections")}
                 </Button>
               </div>
             </GlassCard>

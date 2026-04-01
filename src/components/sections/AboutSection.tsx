@@ -10,7 +10,7 @@ import {
 } from "@/lib/animations";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { GlassCard } from "@/components/ui/GlassCard";
-import { brandStory } from "@/data/content";
+import { useI18n } from "@/lib/i18n";
 
 const iconMap: Record<string, React.ReactNode> = {
   leaf: (
@@ -35,16 +35,24 @@ const iconMap: Record<string, React.ReactNode> = {
   ),
 };
 
+const highlightKeys = [
+  { icon: "leaf", titleKey: "about.highlight.freshStrains" as const, descKey: "about.highlight.freshStrains.desc" as const },
+  { icon: "star", titleKey: "about.highlight.premiumQuality" as const, descKey: "about.highlight.premiumQuality.desc" as const },
+  { icon: "users", titleKey: "about.highlight.friendlyService" as const, descKey: "about.highlight.friendlyService.desc" as const },
+  { icon: "shield", titleKey: "about.highlight.safeLegal" as const, descKey: "about.highlight.safeLegal.desc" as const },
+];
+
 export function AboutSection() {
+  const { t } = useI18n();
+
   return (
     <section id="about" className="relative py-24 sm:py-32 overflow-hidden">
-      {/* Background */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(245,158,11,0.04)_0%,transparent_60%)]" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6">
         <SectionHeading
-          title={brandStory.title}
-          subtitle={brandStory.subtitle}
+          title={t("about.title")}
+          subtitle={t("about.subtitle")}
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -56,7 +64,7 @@ export function AboutSection() {
             viewport={{ once: true }}
             className="space-y-6"
           >
-            {brandStory.paragraphs.map((paragraph, i) => (
+            {[t("about.p1"), t("about.p2"), t("about.p3")].map((paragraph, i) => (
               <p
                 key={i}
                 className="text-brand-cream/60 leading-relaxed text-lg"
@@ -93,17 +101,17 @@ export function AboutSection() {
           viewport={{ once: true }}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-20"
         >
-          {brandStory.highlights.map((highlight) => (
-            <motion.div key={highlight.title} variants={fadeInUp}>
+          {highlightKeys.map((h) => (
+            <motion.div key={h.titleKey} variants={fadeInUp}>
               <GlassCard glow="green" className="h-full">
                 <div className="text-brand-green mb-3">
-                  {iconMap[highlight.icon] ?? iconMap.star}
+                  {iconMap[h.icon] ?? iconMap.star}
                 </div>
                 <h3 className="text-lg font-bold text-brand-ivory font-display">
-                  {highlight.title}
+                  {t(h.titleKey)}
                 </h3>
                 <p className="mt-2 text-sm text-brand-cream/50">
-                  {highlight.description}
+                  {t(h.descKey)}
                 </p>
               </GlassCard>
             </motion.div>

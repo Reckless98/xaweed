@@ -8,8 +8,8 @@ import { RastaDivider } from "@/components/ui/RastaDivider";
 import { LineFloatingButton } from "@/components/ui/LineFloatingButton";
 
 export const metadata: Metadata = {
-  title: "About",
-  description: "Learn about Xaweed Shop — premium cannabis, chill vibes, and friendly service in Nonthaburi.",
+  title: "เกี่ยวกับเรา | Xaweed Shop",
+  description: "เรียนรู้เกี่ยวกับ Xaweed Shop — กัญชาพรีเมียม บรรยากาศชิลๆ บริการเป็นกันเอง จ.นนทบุรี",
 };
 
 export default function AboutPage() {

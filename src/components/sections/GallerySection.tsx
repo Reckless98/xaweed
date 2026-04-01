@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { staggerContainer, fadeInUp } from "@/lib/animations";
+import { useI18n } from "@/lib/i18n";
 
 const galleryImages = [
   { src: "/images/shop/shop-interior-counter.jpeg", alt: "Xaweed Shop counter" },
@@ -19,6 +20,7 @@ const galleryImages = [
 
 export function GallerySection() {
   const [lightbox, setLightbox] = useState<number | null>(null);
+  const { t } = useI18n();
 
   return (
     <section id="gallery" className="relative py-24 sm:py-32 overflow-hidden">
@@ -26,8 +28,8 @@ export function GallerySection() {
 
       <div className="relative z-10 max-w-7xl mx-auto px-6">
         <SectionHeading
-          title="Inside Xaweed"
-          subtitle="Take a look at our shop, our products, and the vibe."
+          title={t("gallery.title")}
+          subtitle={t("gallery.subtitle")}
         />
 
         <motion.div

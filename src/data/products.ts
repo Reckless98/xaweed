@@ -671,6 +671,30 @@ export const products: Product[] = [
 
   // ─── ACCESSORIES ────────────────────────────────────
   {
+    id: "acrylic-bong-unbreakable",
+    name: "บ้องอะคริลิก ตกไม่แตก",
+    slug: "acrylic-bong-unbreakable",
+    category: "bong",
+    shortDescription: "บ้องอะคริลิก 30cm ตกไม่แตก พกพาง่าย หมุนถอดล้างได้",
+    longDescription:
+      "บ้องตกไม่แตก 💯 พัสดุอะคริลิก ขนาด 30cm มีอุปกรณ์ล้างบ้องให้ครบจบ สะดวกสำหรับคนที่เดินทางและทำอุปกรณ์บ้องตกบ่อย พกพาง่ายสะดวก หมุนถอดล้างได้",
+    priceDisplay: "฿990 / กล่อง",
+    priceValue: 990,
+    image: "/images/products/bongs/acrylic-bong.jpeg",
+    images: [
+      "/images/products/bongs/acrylic-bong.jpeg",
+      "/images/products/bongs/acrylic-bong-1.jpeg",
+      "/images/products/bongs/acrylic-bong-2.jpeg",
+      "/images/products/bongs/acrylic-bong-3.jpeg",
+    ],
+    tags: ["bong", "acrylic", "unbreakable", "portable", "30cm"],
+    featured: true,
+    inStock: true,
+    lineInquiryText: "สวัสดีค่ะ สนใจบ้องอะคริลิกตกไม่แตก",
+    effects: ["Portable", "Durable", "Easy Clean"],
+    priceOptions: [{ label: "1 กล่อง", price: 990 }],
+  },
+  {
     id: "grinder-premium",
     name: "Premium Grinder",
     slug: "grinder-premium",
@@ -728,6 +752,14 @@ export const categories: Category[] = [
     description: "Grinders, papers, pipes & more",
     image: "/images/categories/accessories.jpg",
     productCount: products.filter((p) => p.category === "accessory").length,
+  },
+  {
+    id: "bong",
+    name: "Bongs",
+    slug: "bongs",
+    description: "Premium acrylic & glass bongs",
+    image: "/images/products/bongs/acrylic-bong.jpeg",
+    productCount: products.filter((p) => p.category === "bong").length,
   },
 ];
 

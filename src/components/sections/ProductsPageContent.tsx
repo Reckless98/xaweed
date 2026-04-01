@@ -4,16 +4,21 @@ import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { products, categories } from "@/data/products";
 import { ProductCard } from "@/components/ui/ProductCard";
+import { useI18n } from "@/lib/i18n";
 import type { ProductCategory } from "@/types";
-
-const filterTabs: { label: string; value: ProductCategory | "all" }[] = [
-  { label: "All", value: "all" },
-  ...categories.map((c) => ({ label: c.name, value: c.id as ProductCategory })),
-];
 
 export function ProductsPageContent() {
   const [active, setActive] = useState<ProductCategory | "all">("all");
   const [search, setSearch] = useState("");
+  const { t, locale } = useI18n();
+
+  const filterTabs: { label: string; value: ProductCategory | "all" }[] = [
+    { label: t("products.all"), value: "all" },
+    ...categories.map((c) => {
+      const key = `category.${c.id}` as import("@/lib/i18n").TranslationKey;
+      return { label: t(key) || c.name, value: c.id as ProductCategory };
+    }),
+  ];
 
   const filtered = useMemo(() => {
     let list = products;
@@ -40,7 +45,7 @@ export function ProductsPageContent() {
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search strains, edibles, accessories..."
+          placeholder={t("products.search")}
           className="w-full max-w-md px-4 py-3 rounded-xl bg-brand-charcoal border border-brand-ash/20 text-brand-ivory placeholder:text-brand-cream/30 focus:outline-none focus:border-brand-green/40 transition-colors"
         />
       </div>
@@ -89,7 +94,7 @@ export function ProductsPageContent() {
             className="glass rounded-2xl p-12 text-center"
           >
             <p className="text-brand-cream/40 text-lg">
-              No products found{search ? ` for "${search}"` : ""}.
+              {t("products.noResults")}{search ? ` "${search}"` : ""}
             </p>
           </motion.div>
         )}

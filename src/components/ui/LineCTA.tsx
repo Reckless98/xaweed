@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/Button";
 import { lineConfig } from "@/lib/line";
+import { useI18n } from "@/lib/i18n";
 
 interface LineCTAProps {
   text?: string;
@@ -10,10 +11,13 @@ interface LineCTAProps {
 }
 
 export function LineCTA({
-  text = "Order via LINE",
+  text,
   variant = "primary",
   className,
 }: LineCTAProps) {
+  const { t } = useI18n();
+  const buttonText = text ?? t("lineCta.addFriend");
+
   if (variant === "banner") {
     return (
       <div
@@ -26,11 +30,10 @@ export function LineCTA({
             </svg>
           </div>
           <h3 className="text-xl font-bold text-brand-ivory font-display">
-            Ready to Order?
+            {t("lineCta.title")}
           </h3>
           <p className="text-brand-cream/50 max-w-md">
-            Message us on LINE for orders, questions, or to check our latest strains.
-            We reply fast!
+            {t("lineCta.subtitle")}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 mt-2">
             <Button
@@ -39,10 +42,10 @@ export function LineCTA({
               href={lineConfig.profileUrl}
               external
             >
-              {text}
+              {buttonText}
             </Button>
             <Button variant="secondary" size="lg" href="#products">
-              Browse Menu
+              {t("hero.viewMenu")}
             </Button>
           </div>
           <p className="text-xs text-brand-cream/30 mt-2">

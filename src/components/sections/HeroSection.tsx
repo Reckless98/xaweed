@@ -5,8 +5,11 @@ import Image from "next/image";
 import { heroText, staggerContainer } from "@/lib/animations";
 import { Button } from "@/components/ui/Button";
 import { lineConfig } from "@/lib/line";
+import { useI18n } from "@/lib/i18n";
 
 export function HeroSection() {
+  const { t } = useI18n();
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background layers */}
@@ -64,8 +67,6 @@ export function HeroSection() {
                 priority
               />
             </div>
-            {/* Pulse ring */}
-            <div className="absolute inset-0 rounded-full border-2 border-brand-green/20 animate-[pulse-ring_2s_ease-out_infinite]" />
           </div>
         </motion.div>
 
@@ -73,7 +74,7 @@ export function HeroSection() {
         <motion.div variants={heroText} className="mb-6">
           <span className="inline-flex items-center gap-2 glass-light px-4 py-2 rounded-full text-sm text-brand-green font-medium">
             <span className="w-2 h-2 rounded-full bg-brand-green animate-pulse-glow" />
-            Premium Cannabis & Lifestyle
+            {t("hero.badge")}
           </span>
         </motion.div>
 
@@ -85,7 +86,7 @@ export function HeroSection() {
           <span className="text-gradient-rasta">XAWEED</span>
           <br />
           <span className="text-brand-ivory text-3xl sm:text-4xl md:text-5xl font-display font-normal">
-            Premium Cannabis Shop
+            {t("hero.subtitle")}
           </span>
         </motion.h1>
 
@@ -94,8 +95,7 @@ export function HeroSection() {
           variants={heroText}
           className="mt-6 text-lg sm:text-xl text-brand-cream/50 max-w-2xl mx-auto leading-relaxed"
         >
-          Fresh strains daily. KANHA edibles. Premium vapes. Chill vibes &amp; friendly
-          service. Your cannabis destination in Nonthaburi.
+          {t("hero.description")}
         </motion.p>
 
         {/* CTAs */}
@@ -114,10 +114,10 @@ export function HeroSection() {
               </svg>
             }
           >
-            Chat on LINE
+            {t("hero.chatLine")}
           </Button>
           <Button variant="secondary" size="lg" href="/products">
-            View Full Menu
+            {t("hero.viewMenu")}
           </Button>
         </motion.div>
 

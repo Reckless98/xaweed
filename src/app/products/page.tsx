@@ -3,10 +3,11 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ProductsPageContent } from "@/components/sections/ProductsPageContent";
 import { LineFloatingButton } from "@/components/ui/LineFloatingButton";
+import { ProductsPageHeader } from "./ProductsPageHeader";
 
 export const metadata: Metadata = {
-  title: "Menu",
-  description: "Browse our full selection of premium cannabis strains, KANHA edibles, vapes, pre-rolls, and accessories.",
+  title: "เมนูสินค้า | Xaweed Shop",
+  description: "เลือกดูสินค้าทั้งหมด — ดอกกัญชาพรีเมียม, ขนม KANHA, บุหรี่ไฟฟ้า, มวนสำเร็จ และอุปกรณ์เสริม อัพเดททุกวัน",
 };
 
 export default function ProductsPage() {
@@ -15,12 +16,7 @@ export default function ProductsPage() {
       <Navbar />
       <main className="min-h-screen pt-24 pb-16 bg-brand-black">
         <div className="max-w-7xl mx-auto px-6">
-          <h1 className="text-4xl md:text-5xl font-bold font-hero text-gradient-rasta mb-2">
-            Full Menu
-          </h1>
-          <p className="text-brand-cream/50 text-lg mb-10">
-            Browse our complete selection — flower, edibles, vapes &amp; more. Updated daily.
-          </p>
+          <ProductsPageHeader />
           <ProductsPageContent />
         </div>
       </main>

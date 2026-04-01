@@ -5,9 +5,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { testimonials } from "@/data/content";
+import { useI18n } from "@/lib/i18n";
 
 export function TestimonialsSection() {
   const [active, setActive] = useState(0);
+  const { t } = useI18n();
 
   return (
     <section className="relative py-24 sm:py-32">
@@ -15,8 +17,8 @@ export function TestimonialsSection() {
 
       <div className="relative z-10 max-w-4xl mx-auto px-6">
         <SectionHeading
-          title="What People Say"
-          subtitle="Real reviews from our customers."
+          title={t("testimonials.title")}
+          subtitle={t("testimonials.subtitle")}
         />
 
         <div className="relative">

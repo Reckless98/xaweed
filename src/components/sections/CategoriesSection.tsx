@@ -5,16 +5,19 @@ import { staggerContainer } from "@/lib/animations";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { CategoryCard } from "@/components/ui/CategoryCard";
 import { categories } from "@/data/products";
+import { useI18n } from "@/lib/i18n";
 
 export function CategoriesSection() {
+  const { t } = useI18n();
+
   return (
     <section id="categories" className="relative py-24 sm:py-32">
       <div className="absolute inset-0 bg-brand-obsidian/50" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6">
         <SectionHeading
-          title="Browse Categories"
-          subtitle="From premium flower to accessories — everything you need for the perfect session."
+          title={t("categories.title")}
+          subtitle={t("categories.subtitle")}
         />
 
         <motion.div

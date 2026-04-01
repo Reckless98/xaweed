@@ -164,6 +164,34 @@ body {
   background: var(--color-brand-green);
 }
 
+/* Accessible focus styles for keyboard navigation */
+:focus-visible {
+  outline: 2px solid var(--color-brand-green);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+button:focus:not(:focus-visible),
+a:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Smooth page transitions */
+@media (prefers-reduced-motion: no-preference) {
+  :root {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 .hero-grid {
   background-image: linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);

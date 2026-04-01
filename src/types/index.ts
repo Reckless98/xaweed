@@ -30,7 +30,8 @@ export type ProductCategory =
   | "edible"
   | "accessory"
   | "concentrate"
-  | "vape";
+  | "vape"
+  | "bong";
 
 export interface Category {
   id: string;

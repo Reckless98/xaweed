@@ -30,7 +30,7 @@ export type ProductCategory =
   | "edible"
   | "accessory"
   | "concentrate"
-  | "vape"
+  // | "vape" // removed — no longer legal
   | "bong";
 
 export interface Category {

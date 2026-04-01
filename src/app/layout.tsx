@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     template: `%s | Xaweed Shop`,
   },
   description:
-    "ร้านกัญชาพรีเมียม นนทบุรี ปากเกร็ด สายพันธุ์คุณภาพ ขนม KANHA บุหรี่ไฟฟ้า บ้อง อุปกรณ์เสริม สั่งผ่าน LINE ส่งเร็ว | Premium cannabis shop Nonthaburi",
+    "ร้านกัญชาพรีเมียม นนทบุรี ปากเกร็ด สายพันธุ์คุณภาพ ขนม KANHA บ้อง อุปกรณ์เสริม สั่งผ่าน LINE ส่งเร็ว | Premium cannabis shop Nonthaburi",
   keywords: [
     "ร้านกัญชา",
     "กัญชานนทบุรี",
@@ -46,7 +46,6 @@ export const metadata: Metadata = {
     "weed shop Thailand",
     "KANHA gummies",
     "premium cannabis",
-    "บุหรี่ไฟฟ้า",
     "บ้อง",
     "กัญชาพรีเมียม",
     "สายพันธุ์กัญชา",
@@ -58,7 +57,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Xaweed Shop — ร้านกัญชาพรีเมียม นนทบุรี",
     description:
-      "สายพันธุ์คุณภาพเปลี่ยนทุกวัน ขนม KANHA บุหรี่ไฟฟ้า บ้อง บรรยากาศชิลๆ | Premium cannabis, fresh daily in Nonthaburi",
+      "สายพันธุ์คุณภาพเปลี่ยนทุกวัน ขนม KANHA บ้อง อุปกรณ์เสริม บรรยากาศชิลๆ | Premium cannabis, fresh daily in Nonthaburi",
     url: siteMetadata.url,
     siteName: "Xaweed Shop",
     locale: "th_TH",
@@ -77,7 +76,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Xaweed Shop — ร้านกัญชาพรีเมียม นนทบุรี",
     description:
-      "สายพันธุ์คุณภาพเปลี่ยนทุกวัน ขนม KANHA บุหรี่ไฟฟ้า บ้อง บรรยากาศชิลๆ | Premium cannabis Nonthaburi",
+      "สายพันธุ์คุณภาพเปลี่ยนทุกวัน ขนม KANHA บ้อง อุปกรณ์เสริม บรรยากาศชิลๆ | Premium cannabis Nonthaburi",
     images: [siteMetadata.ogImage],
   },
   robots: {
@@ -107,7 +106,7 @@ const jsonLd = {
   name: "Xaweed Shop",
   alternateName: "ร้าน Xaweed",
   description:
-    "ร้านกัญชาพรีเมียม นนทบุรี ปากเกร็ด สายพันธุ์คุณภาพ ขนม KANHA บุหรี่ไฟฟ้า บ้อง อุปกรณ์เสริม | Premium cannabis shop Nonthaburi",
+    "ร้านกัญชาพรีเมียม นนทบุรี ปากเกร็ด สายพันธุ์คุณภาพ ขนม KANHA บ้อง อุปกรณ์เสริม | Premium cannabis shop Nonthaburi",
   url: siteMetadata.url,
   telephone: "+66659156189",
   address: {
@@ -151,7 +150,7 @@ const jsonLd = {
     itemListElement: [
       { "@type": "Offer", itemOffered: { "@type": "Product", name: "Premium Cannabis Flower" } },
       { "@type": "Offer", itemOffered: { "@type": "Product", name: "KANHA Edibles" } },
-      { "@type": "Offer", itemOffered: { "@type": "Product", name: "Vapes & Accessories" } },
+      { "@type": "Offer", itemOffered: { "@type": "Product", name: "Pre-Rolls & Accessories" } },
       { "@type": "Offer", itemOffered: { "@type": "Product", name: "Acrylic Bongs" } },
     ],
   },

@@ -15,7 +15,7 @@ const galleryImages = [
   { src: "/images/products/edibles/kanha-catalog-cover.jpeg", alt: "KANHA gummies catalog" },
   { src: "/images/products/strains/purple-gas-mask.jpeg", alt: "Purple Gas Mask strain" },
   { src: "/images/products/strains/supreme-oreoz.jpeg", alt: "Supreme Oreoz strain" },
-  { src: "/images/products/vapes/bar9k-vapes.jpeg", alt: "M BAR 9K vapes" },
+  { src: "/images/products/bongs/acrylic-bong.jpeg", alt: "Acrylic bong" },
 ];
 
 export function GallerySection() {

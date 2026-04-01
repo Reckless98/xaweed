@@ -7,7 +7,7 @@ import { ProductsPageHeader } from "./ProductsPageHeader";
 
 export const metadata: Metadata = {
   title: "เมนูสินค้า | Xaweed Shop",
-  description: "เลือกดูสินค้าทั้งหมด — ดอกกัญชาพรีเมียม, ขนม KANHA, บุหรี่ไฟฟ้า, มวนสำเร็จ และอุปกรณ์เสริม อัพเดททุกวัน",
+  description: "เลือกดูสินค้าทั้งหมด — ดอกกัญชาพรีเมียม, ขนม KANHA, มวนสำเร็จ, บ้อง และอุปกรณ์เสริม อัพเดททุกวัน",
 };
 
 export default function ProductsPage() {

@@ -15,8 +15,8 @@ const translations = {
   "hero.badge": { th: "สินค้าพรีเมียม & ไลฟ์สไตล์", en: "Premium Cannabis & Lifestyle" },
   "hero.subtitle": { th: "Premium Cannabis Shop", en: "Premium Cannabis Shop" },
   "hero.description": {
-    th: "สายพันธุ์คุณภาพเปลี่ยนทุกวัน ขนม KANHA บุหรี่ไฟฟ้า บรรยากาศชิลๆ บริการเป็นกันเอง ร้านกัญชาของคุณในนนทบุรี",
-    en: "Fresh strains daily. KANHA edibles. Premium vapes. Chill vibes & friendly service. Your cannabis destination in Nonthaburi.",
+    th: "สายพันธุ์คุณภาพเปลี่ยนทุกวัน ขนม KANHA บ้อง อุปกรณ์เสริม บรรยากาศชิลๆ บริการเป็นกันเอง ร้านกัญชาของคุณในนนทบุรี",
+    en: "Fresh strains daily. KANHA edibles. Bongs & accessories. Chill vibes & friendly service. Your cannabis destination in Nonthaburi.",
   },
   "hero.chatLine": { th: "แชทผ่าน LINE", en: "Chat on LINE" },
   "hero.viewMenu": { th: "ดูเมนูทั้งหมด", en: "View Full Menu" },
@@ -102,8 +102,8 @@ const translations = {
   // ─── Products Page ──────────────────────────────────
   "products.title": { th: "เมนูทั้งหมด", en: "Full Menu" },
   "products.subtitle": {
-    th: "เลือกดูสินค้าทั้งหมด — ดอก, ขนม, บุหรี่ไฟฟ้า & อื่นๆ อัพเดททุกวัน",
-    en: "Browse our complete selection — flower, edibles, vapes & more. Updated daily.",
+    th: "เลือกดูสินค้าทั้งหมด — ดอก, ขนม, บ้อง & อื่นๆ อัพเดททุกวัน",
+    en: "Browse our complete selection — flower, edibles, bongs & more. Updated daily.",
   },
   "products.search": { th: "ค้นหาสายพันธุ์ ขนม อุปกรณ์...", en: "Search strains, edibles, accessories..." },
   "products.noResults": { th: "ไม่พบสินค้า", en: "No products found" },
@@ -116,8 +116,7 @@ const translations = {
   "category.flower.desc": { th: "สายพันธุ์พรีเมียมอินดอร์ & เอาท์ดอร์ ใหม่ทุกวัน", en: "Premium indoor & outdoor strains, fresh daily" },
   "category.edible": { th: "ขนม", en: "Edibles" },
   "category.edible.desc": { th: "KANHA กัมมี่ & ขนมที่มีสารสกัด", en: "KANHA infused gummies & treats" },
-  "category.vape": { th: "บุหรี่ไฟฟ้า", en: "Vapes" },
-  "category.vape.desc": { th: "พอดใช้แล้วทิ้ง & ระบบพอด", en: "Disposable vapes & pod systems" },
+  // "category.vape" and "category.vape.desc" removed — vapes no longer legal
   "category.pre-roll": { th: "มวนสำเร็จ", en: "Pre-Rolls" },
   "category.pre-roll.desc": { th: "จอยท์มวนมือ พร้อมสูบ", en: "Hand-rolled joints, ready to smoke" },
   "category.accessory": { th: "อุปกรณ์เสริม", en: "Accessories" },

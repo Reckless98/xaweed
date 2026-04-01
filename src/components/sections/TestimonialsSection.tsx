@@ -1,0 +1,74 @@
+"use client";
+
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { SectionHeading } from "@/components/ui/SectionHeading";
+import { GlassCard } from "@/components/ui/GlassCard";
+import { testimonials } from "@/data/content";
+
+export function TestimonialsSection() {
+  const [active, setActive] = useState(0);
+
+  return (
+    <section className="relative py-24 sm:py-32">
+      <div className="absolute inset-0 bg-brand-obsidian/30" />
+
+      <div className="relative z-10 max-w-4xl mx-auto px-6">
+        <SectionHeading
+          title="What People Say"
+          subtitle="Real reviews from our customers."
+        />
+
+        <div className="relative">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={active}
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -30 }}
+              transition={{ duration: 0.4 }}
+            >
+              <GlassCard padding="lg" className="text-center">
+                {/* Stars */}
+                <div className="flex justify-center gap-1 mb-4">
+                  {Array.from({ length: testimonials[active].rating }, (_, i) => (
+                    <svg
+                      key={i}
+                      className="w-5 h-5 text-brand-rasta-gold"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  ))}
+                </div>
+                <p className="text-xl text-brand-cream/70 leading-relaxed italic mb-6">
+                  &ldquo;{testimonials[active].text}&rdquo;
+                </p>
+                <p className="text-brand-green font-semibold font-display">
+                  {testimonials[active].name}
+                </p>
+              </GlassCard>
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Dots */}
+          <div className="flex justify-center gap-2 mt-6">
+            {testimonials.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setActive(i)}
+                className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                  i === active
+                    ? "bg-brand-green w-8"
+                    : "bg-brand-ash hover:bg-brand-cream/30"
+                }`}
+                aria-label={`Testimonial ${i + 1}`}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

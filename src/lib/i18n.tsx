@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from "react";
+import { createContext, useContext, useState, useCallback, type ReactNode } from "react";
 
 export type Locale = "th" | "en";
 
@@ -160,15 +160,16 @@ const I18nContext = createContext<I18nContextValue>({
   t: (key) => key,
 });
 
-export function I18nProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>("th");
+function getInitialLocale(): Locale {
+  if (typeof window !== "undefined") {
+    const saved = localStorage.getItem("xaweed-lang");
+    if (saved === "th" || saved === "en") return saved;
+  }
+  return "th";
+}
 
-  useEffect(() => {
-    const saved = localStorage.getItem("xaweed-lang") as Locale | null;
-    if (saved && (saved === "th" || saved === "en")) {
-      setLocaleState(saved);
-    }
-  }, []);
+export function I18nProvider({ children }: { children: ReactNode }) {
+  const [locale, setLocaleState] = useState<Locale>(getInitialLocale);
 
   const setLocale = useCallback((newLocale: Locale) => {
     setLocaleState(newLocale);

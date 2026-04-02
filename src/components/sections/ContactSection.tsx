@@ -159,14 +159,13 @@ export function ContactSection() {
               <div className="w-full h-full rounded-xl overflow-hidden min-h-100">
                 <iframe
                   title="Xaweed Shop Location"
-                  src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3873.0!2d${contactInfo.coordinates.lng}!3d${contactInfo.coordinates.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTPCsDU0JzQ4LjIiTiAxMDDCsDMxJzI5LjYiRQ!5e0!3m2!1sen!2sth!4v1`}
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1936.5!2d100.5249!3d13.9134!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e29df9f1652127%3A0xf52d2c1fc7e995bb!2sXaweed%20Shop!5e0!3m2!1sen!2sth!4v1"
                   width="100%"
                   height="100%"
-                  style={{ border: 0, minHeight: 400 }}
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  className="rounded-xl"
+                  className="rounded-xl border-0 min-h-[400px]"
                 />
               </div>
             </GlassCard>

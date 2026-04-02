@@ -27,10 +27,10 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
     <motion.div
       variants={fadeInUp}
       custom={index}
-      whileHover={{ y: -6, transition: { duration: 0.3 } }}
+      whileHover={{ y: -8, transition: { duration: 0.3, ease: "easeOut" } }}
       className="group relative"
     >
-      <div className="glass rounded-2xl overflow-hidden transition-all duration-500 hover:shadow-glow">
+      <div className="glass rounded-2xl overflow-hidden transition-all duration-500 hover:shadow-glow hover:border-brand-green/10 border border-transparent">
         {/* Image */}
         <div className="relative aspect-square overflow-hidden bg-brand-charcoal">
           <Image

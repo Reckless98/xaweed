@@ -3,34 +3,51 @@ import type { BrandStory, ContactInfo, FAQ, PromoBanner } from "@/types";
 export interface Testimonial {
   name: string;
   text: string;
+  textTh?: string;
   rating: number;
+  source?: string;
 }
 
 export const testimonials: Testimonial[] = [
   {
-    name: "Mike T.",
-    text: "Best weed shop in Nonthaburi hands down. The Cajan Mintz had me floating. Staff is super chill and knowledgeable.",
+    name: "Kiaam K.",
+    text: "My favorite dispensary in Thailand by far, very good prices and high quality weed. If you are coming from USA you will love the prices. The owners are very cool and fully know their product.",
     rating: 5,
+    source: "Google",
   },
   {
-    name: "Sarah K.",
-    text: "Love the KANHA gummies! The Watermelon Hybrid is my favourite. Great prices and always friendly service.",
+    name: "Pornpisek S.",
+    text: "Good prices, friendly vibes. Will definitely come back next time I'm in the area.",
+    textTh: "ราคาดี อัทยาศัยดี วันหลังผ่านมาจะมาซํ้าอีก",
     rating: 5,
+    source: "Google",
   },
   {
-    name: "Jay P.",
-    text: "Finally a shop with real quality strains. The Code Red is absolutely fire. They also have a PS5 you can play while you chill!",
+    name: "Karma H.",
+    text: "Amazing quality! You get a lot and the budget is very affordable. Worth it every time.",
+    textTh: "ของดีมากครับ ได้เยอะงบเเตะต้องได้ คุ้มๆ",
     rating: 5,
+    source: "Google",
   },
   {
-    name: "Natt S.",
-    text: "Clean shop, great vibes, amazing weed. The Miami Vice is perfect for daytime. Been coming back every week.",
+    name: "Apirak A.",
+    text: "This shop is ridiculously cheap for the quality. They have tons of choices, great value beyond the price. The owner gives amazing recommendations. Easy parking too — right on the street.",
+    textTh: "ร้านนี้ราคาถูกมากราคาจับต้องได้ครับของให้เลือกเยอะแล้วก็คุณภาพดีเกินราคามากครับ",
     rating: 5,
+    source: "Google",
   },
   {
-    name: "Alex R.",
-    text: "Ordered via LINE and got it delivered super fast. Top Banana Fritter is insane. These guys know their stuff.",
-    rating: 4,
+    name: "Pch M.",
+    text: "Good quality, always fragrant. Chill shop, quality stuff.",
+    textTh: "ของดีครับ หอมตลอด ร้านชิวมากคับ ของมีคุณภาพ",
+    rating: 5,
+    source: "Google",
+  },
+  {
+    name: "Siga",
+    text: "Good weed with reasonable price. The owner is very kind and friendly.",
+    rating: 5,
+    source: "Google",
   },
 ];
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { GlassCard } from "@/components/ui/GlassCard";
@@ -9,7 +9,18 @@ import { useI18n } from "@/lib/i18n";
 
 export function TestimonialsSection() {
   const [active, setActive] = useState(0);
-  const { t } = useI18n();
+  const [paused, setPaused] = useState(false);
+  const { t, locale } = useI18n();
+
+  const next = useCallback(() => {
+    setActive((prev) => (prev + 1) % testimonials.length);
+  }, []);
+
+  useEffect(() => {
+    if (paused) return;
+    const interval = setInterval(next, 5000);
+    return () => clearInterval(interval);
+  }, [paused, next]);
 
   return (
     <section className="relative py-24 sm:py-32">
@@ -21,7 +32,7 @@ export function TestimonialsSection() {
           subtitle={t("testimonials.subtitle")}
         />
 
-        <div className="relative">
+        <div className="relative" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
           <AnimatePresence mode="wait">
             <motion.div
               key={active}
@@ -31,6 +42,14 @@ export function TestimonialsSection() {
               transition={{ duration: 0.4 }}
             >
               <GlassCard padding="lg" className="text-center">
+                {/* Source badge */}
+                {testimonials[active].source && (
+                  <div className="flex justify-center mb-3">
+                    <span className="text-xs px-2.5 py-1 rounded-full bg-brand-smoke/80 text-brand-cream/40">
+                      {testimonials[active].source} Review
+                    </span>
+                  </div>
+                )}
                 {/* Stars */}
                 <div className="flex justify-center gap-1 mb-4">
                   {Array.from({ length: testimonials[active].rating }, (_, i) => (
@@ -45,7 +64,7 @@ export function TestimonialsSection() {
                   ))}
                 </div>
                 <p className="text-xl text-brand-cream/70 leading-relaxed italic mb-6">
-                  &ldquo;{testimonials[active].text}&rdquo;
+                  &ldquo;{locale === "th" && testimonials[active].textTh ? testimonials[active].textTh : testimonials[active].text}&rdquo;
                 </p>
                 <p className="text-brand-green font-semibold font-display">
                   {testimonials[active].name}
@@ -54,20 +73,31 @@ export function TestimonialsSection() {
             </motion.div>
           </AnimatePresence>
 
-          {/* Dots */}
-          <div className="flex justify-center gap-2 mt-6">
-            {testimonials.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setActive(i)}
-                className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                  i === active
-                    ? "bg-brand-green w-8"
-                    : "bg-brand-ash hover:bg-brand-cream/30"
-                }`}
-                aria-label={`Testimonial ${i + 1}`}
-              />
-            ))}
+          {/* Dots + Google badge */}
+          <div className="flex items-center justify-center gap-4 mt-8">
+            <div className="flex gap-2">
+              {testimonials.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setActive(i)}
+                  className={`h-2.5 rounded-full transition-all duration-300 ${
+                    i === active
+                      ? "bg-brand-green w-8"
+                      : "bg-brand-ash hover:bg-brand-cream/30 w-2.5"
+                  }`}
+                  aria-label={`Testimonial ${i + 1}`}
+                />
+              ))}
+            </div>
+            <div className="h-4 w-px bg-brand-ash/30" />
+            <a
+              href="https://weed.th/shop/8ad27a23-8b7b-408e-92c8-a5eeea6e48cb/nonthaburi/xaweed-shop"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 text-xs text-brand-cream/40 hover:text-brand-green transition-colors"
+            >
+              <span className="text-brand-rasta-gold">★</span> 5.0 · 52 reviews
+            </a>
           </div>
         </div>
       </div>

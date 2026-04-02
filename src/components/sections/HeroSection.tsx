@@ -34,10 +34,7 @@ export function HeroSection() {
 
       {/* Smoke drift overlay */}
       <div
-        className="absolute inset-0 opacity-30 animate-smoke-drift pointer-events-none"
-        style={{
-          background: "radial-gradient(ellipse at 30% 50%, rgba(34,197,94,0.03) 0%, transparent 50%), radial-gradient(ellipse at 70% 30%, rgba(255,255,255,0.02) 0%, transparent 60%)",
-        }}
+        className="absolute inset-0 opacity-30 animate-smoke-drift pointer-events-none hero-smoke-overlay"
         aria-hidden="true"
       />
 
@@ -123,17 +120,21 @@ export function HeroSection() {
 
         {/* Scroll indicator */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 2.5, duration: 0.8 }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
         >
           <motion.div
             animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-            className="w-6 h-10 rounded-full border-2 border-brand-ash/40 flex items-start justify-center pt-2"
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            className="w-6 h-10 rounded-full border-2 border-brand-ash/30 flex items-start justify-center pt-2"
           >
-            <div className="w-1 h-2 rounded-full bg-brand-green/60" />
+            <motion.div
+              animate={{ opacity: [0.4, 1, 0.4], y: [0, 8, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              className="w-1 h-2.5 rounded-full bg-brand-green/70"
+            />
           </motion.div>
         </motion.div>
       </motion.div>

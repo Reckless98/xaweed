@@ -38,9 +38,10 @@ export function GlassCard({
       initial={hover ? "rest" : undefined}
       whileHover={hover ? "hover" : undefined}
       className={cn(
-        "glass rounded-2xl transition-all duration-300",
+        "glass rounded-2xl transition-all duration-300 border border-transparent",
         paddingStyles[padding],
         glowStyles[glow],
+        hover && "hover:border-brand-green/8",
         className
       )}
     >

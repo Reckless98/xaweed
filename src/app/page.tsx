@@ -1,7 +1,8 @@
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { IntroAnimation } from "@/components/IntroAnimation";
-import { FloatingLeaves } from "@/components/ui/FloatingLeaves";
+import { WeedRain } from "@/components/ui/WeedRain";
+import { ScrollProgress } from "@/components/ui/ScrollProgress";
 import { RastaDivider } from "@/components/ui/RastaDivider";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { FeaturedProductsSection } from "@/components/sections/FeaturedProductsSection";
@@ -17,7 +18,8 @@ export default function Home() {
   return (
     <IntroAnimation>
       <Navbar />
-      <FloatingLeaves />
+      <ScrollProgress />
+      <WeedRain />
       <main>
         <HeroSection />
         <RastaDivider className="my-0" />

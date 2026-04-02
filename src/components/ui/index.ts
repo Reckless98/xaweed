@@ -7,5 +7,6 @@ export { LineFloatingButton } from "./LineFloatingButton";
 export { ProductCard } from "./ProductCard";
 export { CategoryCard } from "./CategoryCard";
 export { LineCTA } from "./LineCTA";
-export { FloatingLeaves } from "./FloatingLeaves";
+export { WeedRain } from "./WeedRain";
+export { ScrollProgress } from "./ScrollProgress";
 export { RastaDivider } from "./RastaDivider";

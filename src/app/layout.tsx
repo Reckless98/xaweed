@@ -140,6 +140,37 @@ const jsonLd = {
   priceRange: "฿฿",
   currenciesAccepted: "THB",
   paymentAccepted: "Cash, LINE Pay",
+  sameAs: [
+    "https://weed.th/shop/8ad27a23-8b7b-408e-92c8-a5eeea6e48cb/nonthaburi/xaweed-shop",
+    "https://line.me/R/ti/p/@688ndwgr",
+  ],
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: "5.0",
+    reviewCount: 52,
+    bestRating: "5",
+    worstRating: "1",
+  },
+  review: [
+    {
+      "@type": "Review",
+      author: { "@type": "Person", name: "Kiaam K." },
+      reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
+      reviewBody: "My favorite dispensary in Thailand by far. The owner is super friendly and knowledgeable.",
+    },
+    {
+      "@type": "Review",
+      author: { "@type": "Person", name: "Siga" },
+      reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
+      reviewBody: "Good weed with reasonable price. The shop owner is also really nice. Recommended!",
+    },
+    {
+      "@type": "Review",
+      author: { "@type": "Person", name: "Pornpisek S." },
+      reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
+      reviewBody: "ราคาดี อัทยาศัยดี ร้านหน้าบ้านในตำนาน ไม่ต้องไปไกล มีนั่งตรงนี้",
+    },
+  ],
   areaServed: {
     "@type": "City",
     name: "Nonthaburi",

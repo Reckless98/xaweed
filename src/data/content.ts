@@ -91,10 +91,10 @@ export const contactInfo: ContactInfo = {
   addressThai:
     "25/460 ซ สี่ไชยทอง 23 บางตลาด อำเภอปากเกร็ด นนทบุรี 11120",
   googleMapsUrl:
-    "https://maps.google.com/?q=Xaweed+Shop+Nonthaburi+Pakkred",
+    "https://www.google.com/maps/place/XAWEED+SHOP/data=!4m2!3m1!1s0x30e29de00cff30c9:0x8cf91ae6ef576562",
   coordinates: {
-    lat: 13.9134,
-    lng: 100.5249,
+    lat: 13.9001716,
+    lng: 100.5233443,
   },
   hours: [
     { day: "Monday", open: "12:00", close: "22:00" },

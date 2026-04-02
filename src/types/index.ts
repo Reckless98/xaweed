@@ -29,9 +29,8 @@ export type ProductCategory =
   | "pre-roll"
   | "edible"
   | "accessory"
-  | "concentrate"
+  | "concentrate";
   // | "vape" // removed — no longer legal
-  | "bong";
 
 export interface Category {
   id: string;

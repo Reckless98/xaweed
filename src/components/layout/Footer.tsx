@@ -140,9 +140,17 @@ export function Footer() {
           <p className="text-xs text-brand-cream/20">
             &copy; {currentYear} Xaweed Shop. {t("footer.rights")}
           </p>
-          <p className="text-xs text-brand-cream/15">
-            Nonthaburi, Thailand
-          </p>
+          <div className="flex items-center gap-4">
+            <a
+              href="/admin/login"
+              className="text-xs text-brand-cream/15 hover:text-brand-cream/40 transition-colors"
+            >
+              Admin
+            </a>
+            <p className="text-xs text-brand-cream/15">
+              Nonthaburi, Thailand
+            </p>
+          </div>
         </div>
       </div>
     </footer>

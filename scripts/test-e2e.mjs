@@ -10,6 +10,7 @@ import { createClient } from "@supabase/supabase-js";
 
 const SUPABASE_URL = "https://qpsmyhpjbibnodmhexbi.supabase.co";
 const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY || "sb_publishable_fBd9Wq0-uSDXUnWYcVU7bA_cE6VipHB";
 
 if (!SERVICE_ROLE_KEY) {
   console.error("❌ SUPABASE_SERVICE_ROLE_KEY not set");
@@ -208,7 +209,7 @@ async function testToggleActive() {
   // Verify inactive product is hidden from public query (using RLS anon key)
   const publicClient = createClient(
     SUPABASE_URL,
-    "sb_publishable_fBd9Wq0-uSDXUnWYcVU7bA_cE6VipHB"
+    ANON_KEY
   );
   const { data: publicData } = await publicClient
     .from("products")
@@ -234,7 +235,7 @@ async function testPublicQueries() {
 
   const publicClient = createClient(
     SUPABASE_URL,
-    "sb_publishable_fBd9Wq0-uSDXUnWYcVU7bA_cE6VipHB"
+    ANON_KEY
   );
 
   // All active products

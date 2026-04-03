@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { Product, Category } from "@/types";
+import { useI18n } from "@/lib/i18n";
 import { deleteProduct, toggleProductStock, toggleProductFeatured, toggleProductActive } from "../actions";
 
 interface AdminProductListProps {
@@ -13,6 +14,7 @@ export function AdminProductList({ products, categories }: AdminProductListProps
   const [filter, setFilter] = useState<string>("all");
   const [search, setSearch] = useState("");
   const [deleting, setDeleting] = useState<string | null>(null);
+  const { t } = useI18n();
 
   const filtered = products.filter((p) => {
     if (filter !== "all" && p.category !== filter) return false;
@@ -27,7 +29,7 @@ export function AdminProductList({ products, categories }: AdminProductListProps
   });
 
   async function handleDelete(id: string, name: string) {
-    if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
+    if (!confirm(t("admin.confirmDelete").replace("{name}", name))) return;
     setDeleting(id);
     const result = await deleteProduct(id);
     if (result?.error) {
@@ -56,7 +58,7 @@ export function AdminProductList({ products, categories }: AdminProductListProps
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search products..."
+          placeholder={t("admin.searchProducts")}
           className="flex-1 max-w-xs px-3 py-2 rounded-lg bg-brand-charcoal border border-brand-ash/20 text-brand-ivory text-sm placeholder:text-brand-cream/30 focus:outline-none focus:border-brand-green/40"
         />
         <div className="flex flex-wrap gap-2">
@@ -68,7 +70,7 @@ export function AdminProductList({ products, categories }: AdminProductListProps
                 : "bg-brand-smoke text-brand-cream/50 hover:text-brand-cream/80"
             }`}
           >
-            All ({products.length})
+            {t("admin.all")} ({products.length})
           </button>
           {categories.map((cat) => {
             const count = products.filter((p) => p.category === cat.id).length;
@@ -95,13 +97,13 @@ export function AdminProductList({ products, categories }: AdminProductListProps
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-brand-smoke/50 text-brand-cream/60 text-left">
-                <th className="px-4 py-3 font-medium">Product</th>
-                <th className="px-4 py-3 font-medium hidden sm:table-cell">Category</th>
-                <th className="px-4 py-3 font-medium">Price</th>
-                <th className="px-4 py-3 font-medium text-center">Stock</th>
-                <th className="px-4 py-3 font-medium text-center hidden sm:table-cell">Featured</th>
-                <th className="px-4 py-3 font-medium text-center hidden sm:table-cell">Active</th>
-                <th className="px-4 py-3 font-medium text-right">Actions</th>
+                <th className="px-4 py-3 font-medium">{t("admin.product")}</th>
+                <th className="px-4 py-3 font-medium hidden sm:table-cell">{t("admin.category")}</th>
+                <th className="px-4 py-3 font-medium">{t("admin.price")}</th>
+                <th className="px-4 py-3 font-medium text-center">{t("admin.stock")}</th>
+                <th className="px-4 py-3 font-medium text-center hidden sm:table-cell">{t("admin.featuredLabel")}</th>
+                <th className="px-4 py-3 font-medium text-center hidden sm:table-cell">{t("admin.active")}</th>
+                <th className="px-4 py-3 font-medium text-right">{t("admin.actions")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-brand-ash/10">
@@ -156,7 +158,7 @@ export function AdminProductList({ products, categories }: AdminProductListProps
                           : "bg-red-500/10 text-red-400"
                       }`}
                     >
-                      {product.inStock ? "In Stock" : "Out"}
+                      {product.inStock ? t("admin.inStock") : t("admin.outOfStock")}
                     </button>
                   </td>
 
@@ -170,7 +172,7 @@ export function AdminProductList({ products, categories }: AdminProductListProps
                           : "bg-brand-smoke text-brand-cream/30"
                       }`}
                     >
-                      {product.featured ? "★ Featured" : "☆"}
+                      {product.featured ? t("admin.featured") : "☆"}
                     </button>
                   </td>
 
@@ -184,7 +186,7 @@ export function AdminProductList({ products, categories }: AdminProductListProps
                           : "bg-red-500/10 text-red-400"
                       }`}
                     >
-                      {product.isActive ? "Active" : "Hidden"}
+                      {product.isActive ? t("admin.activeStatus") : t("admin.hidden")}
                     </button>
                   </td>
 
@@ -195,14 +197,14 @@ export function AdminProductList({ products, categories }: AdminProductListProps
                         href={`/admin/products/${product.id}/edit`}
                         className="px-3 py-1 rounded-lg bg-brand-smoke text-brand-cream/70 text-xs hover:bg-brand-ash/50 transition-colors"
                       >
-                        Edit
+                        {t("admin.edit")}
                       </a>
                       <button
                         onClick={() => handleDelete(product.id, product.name)}
                         disabled={deleting === product.id}
                         className="px-3 py-1 rounded-lg bg-red-500/10 text-red-400 text-xs hover:bg-red-500/20 transition-colors disabled:opacity-50"
                       >
-                        Delete
+                        {t("admin.delete")}
                       </button>
                     </div>
                   </td>
@@ -212,7 +214,7 @@ export function AdminProductList({ products, categories }: AdminProductListProps
               {filtered.length === 0 && (
                 <tr>
                   <td colSpan={7} className="px-4 py-12 text-center text-brand-cream/30">
-                    No products found
+                    {t("admin.noProducts")}
                   </td>
                 </tr>
               )}

@@ -16,7 +16,9 @@ export async function GET(request: Request) {
   const next = searchParams.get("next") ?? "/admin";
 
   const cookieStore = await cookies();
-  const redirectTo = `${origin}${next}`;
+  // Validate redirect target — only allow paths starting with /admin
+  const safePath = next.startsWith("/admin") ? next : "/admin";
+  const redirectTo = `${origin}${safePath}`;
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,

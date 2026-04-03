@@ -3,10 +3,13 @@ import { siteMetadata } from "@/data/site";
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: {
-      userAgent: "*",
-      allow: "/",
-    },
+    rules: [
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: ["/admin/", "/auth/"],
+      },
+    ],
     sitemap: `${siteMetadata.url}/sitemap.xml`,
   };
 }

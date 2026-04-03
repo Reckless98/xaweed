@@ -71,6 +71,13 @@ async function requireAdmin() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) throw new Error("Not authenticated");
+
+  // Enforce admin email at the action level (defense in depth)
+  const adminEmail = process.env.ADMIN_EMAIL;
+  if (adminEmail && user.email !== adminEmail) {
+    throw new Error("Unauthorized");
+  }
+
   return user;
 }
 

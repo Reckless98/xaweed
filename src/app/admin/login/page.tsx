@@ -2,16 +2,19 @@
 
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { useI18n } from "@/lib/i18n";
 import { loginWithMagicLink } from "../actions";
-
-const URL_ERRORS: Record<string, string> = {
-  auth_failed: "Authentication failed. Please try again.",
-  unauthorized: "This email is not authorized for admin access.",
-};
 
 function LoginForm() {
   const searchParams = useSearchParams();
   const urlError = searchParams.get("error");
+  const { locale, setLocale, t } = useI18n();
+
+  const URL_ERRORS: Record<string, string> = {
+    auth_failed: t("admin.login.authFailed"),
+    unauthorized: t("admin.login.unauthorized"),
+  };
 
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "sent" | "error">(
@@ -43,27 +46,42 @@ function LoginForm() {
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-brand-ivory">
-            🌿 Xaweed Admin
-          </h1>
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <h1 className="text-2xl font-bold text-brand-ivory">
+              {t("admin.login.title")}
+            </h1>
+            <button
+              onClick={() => setLocale(locale === "th" ? "en" : "th")}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-brand-smoke/60 border border-brand-ash/20 hover:border-brand-green/30 transition-all text-sm"
+              aria-label="Toggle language"
+            >
+              <span className={locale === "th" ? "text-brand-green font-semibold" : "text-brand-cream/40"}>
+                TH
+              </span>
+              <span className="text-brand-ash/40">/</span>
+              <span className={locale === "en" ? "text-brand-green font-semibold" : "text-brand-cream/40"}>
+                EN
+              </span>
+            </button>
+          </div>
           <p className="text-brand-cream/50 text-sm mt-2">
-            Sign in with your email to manage products
+            {t("admin.login.subtitle")}
           </p>
         </div>
 
         {status === "sent" ? (
           <div className="rounded-xl bg-brand-green/10 border border-brand-green/20 p-6 text-center">
-            <p className="text-brand-green font-medium">Check your email!</p>
+            <p className="text-brand-green font-medium">{t("admin.login.checkEmail")}</p>
             <p className="text-brand-cream/50 text-sm mt-2">
-              We sent a magic link to <strong className="text-brand-ivory">{email}</strong>.
-              Click the link to sign in.
+              {t("admin.login.magicLinkSent")} <strong className="text-brand-ivory">{email}</strong>.
+              {" "}{t("admin.login.clickToSign")}
             </p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm text-brand-cream/70 mb-1.5">
-                Email address
+                {t("admin.login.email")}
               </label>
               <input
                 id="email"
@@ -86,15 +104,15 @@ function LoginForm() {
               disabled={status === "loading"}
               className="w-full py-3 rounded-xl bg-brand-green text-brand-black font-semibold hover:bg-brand-green/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {status === "loading" ? "Sending..." : "Send Magic Link"}
+              {status === "loading" ? t("admin.login.sending") : t("admin.login.sendLink")}
             </button>
           </form>
         )}
 
         <p className="text-center text-brand-cream/30 text-xs mt-6">
-          <a href="/" className="hover:text-brand-cream/60 transition-colors">
-            ← Back to site
-          </a>
+          <Link href="/" className="hover:text-brand-cream/60 transition-colors">
+            {t("admin.login.backToSite")}
+          </Link>
         </p>
       </div>
     </div>

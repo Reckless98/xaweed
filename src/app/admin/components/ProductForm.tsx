@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useRef } from "react";
+import Link from "next/link";
 import type { Product } from "@/types";
+import { useI18n } from "@/lib/i18n";
 import { createProduct, updateProduct, uploadProductImage } from "../actions";
 
 interface ProductFormProps {
@@ -24,13 +26,91 @@ const STRAINS = [
   { value: "hybrid", label: "Hybrid" },
 ];
 
+const THAI_RANGE = /[\u0E00-\u0E7F]/;
+
+function isThai(text: string): boolean {
+  return THAI_RANGE.test(text);
+}
+
 function slugify(text: string): string {
+  // If text contains Thai characters, transliterate common sounds
+  // but for product names that are typically English brand names,
+  // just strip non-ASCII and slugify
   return text
     .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // remove diacritics
+    .replace(/[\u0E00-\u0E7F]+/g, (match) => {
+      // Basic Thai-to-romanized mapping for slug generation
+      const map: Record<string, string> = {
+        "ก": "k", "ข": "kh", "ค": "kh", "ฆ": "kh", "ง": "ng",
+        "จ": "ch", "ฉ": "ch", "ช": "ch", "ซ": "s", "ฌ": "ch",
+        "ญ": "y", "ฎ": "d", "ฏ": "t", "ฐ": "th", "ฑ": "th",
+        "ฒ": "th", "ณ": "n", "ด": "d", "ต": "t", "ถ": "th",
+        "ท": "th", "ธ": "th", "น": "n", "บ": "b", "ป": "p",
+        "ผ": "ph", "ฝ": "f", "พ": "ph", "ฟ": "f", "ภ": "ph",
+        "ม": "m", "ย": "y", "ร": "r", "ล": "l", "ว": "w",
+        "ศ": "s", "ษ": "s", "ส": "s", "ห": "h", "ฬ": "l",
+        "อ": "o", "ฮ": "h",
+        "ะ": "a", "า": "a", "ิ": "i", "ี": "i", "ึ": "ue",
+        "ื": "ue", "ุ": "u", "ู": "u", "เ": "e", "แ": "ae",
+        "โ": "o", "ไ": "ai", "ใ": "ai",
+      };
+      return [...match].map((c) => map[c] || "").join("");
+    })
     .replace(/[^\w\s-]/g, "")
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "")
     .trim();
+}
+
+function generateSeoTitle(name: string, category: string, brand?: string): string {
+  const brandSuffix = brand ? ` ${brand}` : "";
+  const categoryMap: Record<string, { th: string; en: string }> = {
+    flower: { th: "ดอกกัญชา", en: "Cannabis Flower" },
+    edible: { th: "ขนมกัญชา", en: "Cannabis Edible" },
+    "pre-roll": { th: "มวนสำเร็จ", en: "Pre-Roll" },
+    accessory: { th: "อุปกรณ์กัญชา", en: "Cannabis Accessory" },
+    concentrate: { th: "สารสกัดกัญชา", en: "Cannabis Concentrate" },
+  };
+  const cat = categoryMap[category] || { th: category, en: category };
+  if (isThai(name)) {
+    return `${name}${brandSuffix} — ${cat.th} | Xaweed Shop`;
+  }
+  return `${name}${brandSuffix} — ${cat.en} | Xaweed Shop`;
+}
+
+function generateSeoDescription(
+  name: string,
+  category: string,
+  shortDesc: string,
+  priceDisplay: string,
+  strain?: string,
+  thcContent?: string,
+): string {
+  const parts: string[] = [];
+  if (isThai(name)) {
+    parts.push(`${name} — ${shortDesc || "สินค้าคุณภาพพรีเมียม"}`);
+    if (priceDisplay) parts.push(`ราคา ${priceDisplay}`);
+    if (strain) parts.push(`สายพันธุ์ ${strain}`);
+    if (thcContent) parts.push(`THC: ${thcContent}`);
+    parts.push("สั่งซื้อผ่าน LINE ที่ Xaweed Shop นนทบุรี");
+  } else {
+    parts.push(`${name} — ${shortDesc || "Premium quality product"}`);
+    if (priceDisplay) parts.push(priceDisplay);
+    if (strain) parts.push(`${strain} strain`);
+    if (thcContent) parts.push(`THC: ${thcContent}`);
+    parts.push("Order via LINE at Xaweed Shop, Nonthaburi");
+  }
+  return parts.join(". ").slice(0, 160);
+}
+
+function generateLineInquiryText(name: string): string {
+  if (isThai(name)) {
+    return `สวัสดีครับ/ค่ะ สนใจสั่ง ${name} ครับ/ค่ะ`;
+  }
+  return `Hi! I'd like to order ${name}.`;
 }
 
 export function ProductForm({ product, mode }: ProductFormProps) {
@@ -65,13 +145,33 @@ export function ProductForm({ product, mode }: ProductFormProps) {
   const [error, setError] = useState("");
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { t } = useI18n();
 
   function handleNameChange(value: string) {
     setName(value);
     if (mode === "create") {
       setSlug(slugify(value));
-      setLineText(`Hi! I'd like to order ${value}.`);
+      setLineText(generateLineInquiryText(value));
+      // Auto-generate SEO fields
+      setSeoTitle(generateSeoTitle(value, category, brand || undefined));
+      setSeoDescription(
+        generateSeoDescription(value, category, shortDesc, priceDisplay, strain || undefined, thcContent || undefined)
+      );
     }
+  }
+
+  // Re-generate SEO when relevant fields change (only on create, or if SEO fields haven't been manually edited)
+  function updateAutoSeo(overrides?: { name?: string; cat?: string; brandVal?: string; desc?: string; price?: string; strainVal?: string; thcVal?: string }) {
+    const n = overrides?.name ?? name;
+    const c = overrides?.cat ?? category;
+    const b = overrides?.brandVal ?? brand;
+    const d = overrides?.desc ?? shortDesc;
+    const p = overrides?.price ?? priceDisplay;
+    const s = overrides?.strainVal ?? strain;
+    const th = overrides?.thcVal ?? thcContent;
+    if (!n) return;
+    setSeoTitle(generateSeoTitle(n, c, b || undefined));
+    setSeoDescription(generateSeoDescription(n, c, d, p, s || undefined, th || undefined));
   }
 
   async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
@@ -132,8 +232,8 @@ export function ProductForm({ product, mode }: ProductFormProps) {
             return { label, price: Number(price) || 0 };
           })
         : [],
-      seo_title: seoTitle || null,
-      seo_description: seoDescription || null,
+      seo_title: seoTitle || generateSeoTitle(name, category, brand || undefined) || null,
+      seo_description: seoDescription || generateSeoDescription(name, category, shortDesc, priceDisplay, strain || undefined, thcContent || undefined) || null,
     };
 
     let result;
@@ -165,12 +265,12 @@ export function ProductForm({ product, mode }: ProductFormProps) {
       {/* Basic Info */}
       <fieldset className="space-y-4 rounded-xl border border-brand-ash/20 p-4">
         <legend className="text-sm font-medium text-brand-cream/70 px-2">
-          Basic Info
+          {t("admin.form.basicInfo")}
         </legend>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="name" className={labelClass}>Name *</label>
+            <label htmlFor="name" className={labelClass}>{t("admin.form.name")}</label>
             <input
               id="name"
               type="text"
@@ -182,7 +282,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
             />
           </div>
           <div>
-            <label htmlFor="slug" className={labelClass}>Slug *</label>
+            <label htmlFor="slug" className={labelClass}>{t("admin.form.slug")}</label>
             <input
               id="slug"
               type="text"
@@ -197,11 +297,15 @@ export function ProductForm({ product, mode }: ProductFormProps) {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="category" className={labelClass}>Category *</label>
+            <label htmlFor="category" className={labelClass}>{t("admin.form.category")}</label>
             <select
               id="category"
               value={category}
-              onChange={(e) => setCategory(e.target.value as Product["category"])}
+              onChange={(e) => {
+                const v = e.target.value as Product["category"];
+                setCategory(v);
+                if (mode === "create") updateAutoSeo({ cat: v });
+              }}
               className={inputClass}
             >
               {CATEGORIES.map((c) => (
@@ -212,12 +316,15 @@ export function ProductForm({ product, mode }: ProductFormProps) {
             </select>
           </div>
           <div>
-            <label htmlFor="brand" className={labelClass}>Brand</label>
+            <label htmlFor="brand" className={labelClass}>{t("admin.form.brand")}</label>
             <input
               id="brand"
               type="text"
               value={brand}
-              onChange={(e) => setBrand(e.target.value)}
+              onChange={(e) => {
+                setBrand(e.target.value);
+                if (mode === "create") updateAutoSeo({ brandVal: e.target.value });
+              }}
               className={inputClass}
               placeholder="KANHA"
             />
@@ -225,12 +332,15 @@ export function ProductForm({ product, mode }: ProductFormProps) {
         </div>
 
         <div>
-          <label htmlFor="shortDesc" className={labelClass}>Short Description *</label>
+          <label htmlFor="shortDesc" className={labelClass}>{t("admin.form.shortDesc")}</label>
           <input
             id="shortDesc"
             type="text"
             value={shortDesc}
-            onChange={(e) => setShortDesc(e.target.value)}
+            onChange={(e) => {
+              setShortDesc(e.target.value);
+              if (mode === "create") updateAutoSeo({ desc: e.target.value });
+            }}
             required
             className={inputClass}
             placeholder="Minty hybrid — cool menthol finish"
@@ -238,7 +348,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
         </div>
 
         <div>
-          <label htmlFor="longDesc" className={labelClass}>Long Description</label>
+          <label htmlFor="longDesc" className={labelClass}>{t("admin.form.longDesc")}</label>
           <textarea
             id="longDesc"
             value={longDesc}
@@ -253,24 +363,27 @@ export function ProductForm({ product, mode }: ProductFormProps) {
       {/* Pricing */}
       <fieldset className="space-y-4 rounded-xl border border-brand-ash/20 p-4">
         <legend className="text-sm font-medium text-brand-cream/70 px-2">
-          Pricing
+          {t("admin.form.pricing")}
         </legend>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="priceDisplay" className={labelClass}>Display Price *</label>
+            <label htmlFor="priceDisplay" className={labelClass}>{t("admin.form.displayPrice")}</label>
             <input
               id="priceDisplay"
               type="text"
               value={priceDisplay}
-              onChange={(e) => setPriceDisplay(e.target.value)}
+              onChange={(e) => {
+                setPriceDisplay(e.target.value);
+                if (mode === "create") updateAutoSeo({ price: e.target.value });
+              }}
               required
               className={inputClass}
               placeholder="฿200 / 1g"
             />
           </div>
           <div>
-            <label htmlFor="priceValue" className={labelClass}>Price Value (THB) *</label>
+            <label htmlFor="priceValue" className={labelClass}>{t("admin.form.priceValue")}</label>
             <input
               id="priceValue"
               type="number"
@@ -285,7 +398,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
 
         <div>
           <label htmlFor="priceOptions" className={labelClass}>
-            Price Options (label:price, comma-separated)
+            {t("admin.form.priceOptions")}
           </label>
           <input
             id="priceOptions"
@@ -301,11 +414,11 @@ export function ProductForm({ product, mode }: ProductFormProps) {
       {/* Images */}
       <fieldset className="space-y-4 rounded-xl border border-brand-ash/20 p-4">
         <legend className="text-sm font-medium text-brand-cream/70 px-2">
-          Images
+          {t("admin.form.images")}
         </legend>
 
         <div>
-          <label htmlFor="image" className={labelClass}>Main Image URL *</label>
+          <label htmlFor="image" className={labelClass}>{t("admin.form.mainImage")}</label>
           <input
             id="image"
             type="text"
@@ -325,7 +438,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
         )}
 
         <div>
-          <label htmlFor="imageUpload" className={labelClass}>Upload Image</label>
+          <label htmlFor="imageUpload" className={labelClass}>{t("admin.form.uploadImage")}</label>
           <input
             id="imageUpload"
             ref={fileInputRef}
@@ -336,13 +449,13 @@ export function ProductForm({ product, mode }: ProductFormProps) {
             className="text-sm text-brand-cream/50 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-brand-smoke file:text-brand-cream/70 file:text-sm hover:file:bg-brand-ash/50 file:cursor-pointer file:transition-colors disabled:opacity-50"
           />
           {uploading && (
-            <p className="text-brand-green text-xs mt-1">Uploading...</p>
+            <p className="text-brand-green text-xs mt-1">{t("admin.form.uploading")}</p>
           )}
         </div>
 
         <div>
           <label htmlFor="images" className={labelClass}>
-            Additional Images (one URL per line)
+            {t("admin.form.additionalImages")}
           </label>
           <textarea
             id="images"
@@ -360,16 +473,19 @@ export function ProductForm({ product, mode }: ProductFormProps) {
       {/* Cannabis Details */}
       <fieldset className="space-y-4 rounded-xl border border-brand-ash/20 p-4">
         <legend className="text-sm font-medium text-brand-cream/70 px-2">
-          Cannabis Details (optional)
+          {t("admin.form.cannabisDetails")}
         </legend>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
-            <label htmlFor="strain" className={labelClass}>Strain Type</label>
+            <label htmlFor="strain" className={labelClass}>{t("admin.form.strainType")}</label>
             <select
               id="strain"
               value={strain}
-              onChange={(e) => setStrain(e.target.value)}
+              onChange={(e) => {
+                setStrain(e.target.value);
+                if (mode === "create") updateAutoSeo({ strainVal: e.target.value });
+              }}
               className={inputClass}
             >
               {STRAINS.map((s) => (
@@ -380,18 +496,21 @@ export function ProductForm({ product, mode }: ProductFormProps) {
             </select>
           </div>
           <div>
-            <label htmlFor="thc" className={labelClass}>THC Content</label>
+            <label htmlFor="thc" className={labelClass}>{t("admin.form.thcContent")}</label>
             <input
               id="thc"
               type="text"
               value={thcContent}
-              onChange={(e) => setThcContent(e.target.value)}
+              onChange={(e) => {
+                setThcContent(e.target.value);
+                if (mode === "create") updateAutoSeo({ thcVal: e.target.value });
+              }}
               className={inputClass}
               placeholder="High"
             />
           </div>
           <div>
-            <label htmlFor="weight" className={labelClass}>Weight</label>
+            <label htmlFor="weight" className={labelClass}>{t("admin.form.weight")}</label>
             <input
               id="weight"
               type="text"
@@ -405,7 +524,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
 
         <div>
           <label htmlFor="effects" className={labelClass}>
-            Effects (comma-separated)
+            {t("admin.form.effects")}
           </label>
           <input
             id="effects"
@@ -421,12 +540,12 @@ export function ProductForm({ product, mode }: ProductFormProps) {
       {/* Meta */}
       <fieldset className="space-y-4 rounded-xl border border-brand-ash/20 p-4">
         <legend className="text-sm font-medium text-brand-cream/70 px-2">
-          Settings
+          {t("admin.form.settings")}
         </legend>
 
         <div>
           <label htmlFor="tags" className={labelClass}>
-            Tags (comma-separated)
+            {t("admin.form.tags")}
           </label>
           <input
             id="tags"
@@ -439,7 +558,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
         </div>
 
         <div>
-          <label htmlFor="lineText" className={labelClass}>LINE Inquiry Text</label>
+          <label htmlFor="lineText" className={labelClass}>{t("admin.form.lineInquiry")}</label>
           <input
             id="lineText"
             type="text"
@@ -458,7 +577,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
               onChange={(e) => setIsActive(e.target.checked)}
               className="w-4 h-4 rounded accent-brand-green"
             />
-            <span className="text-sm text-brand-cream/70">Active (visible on site)</span>
+            <span className="text-sm text-brand-cream/70">{t("admin.form.activeVisible")}</span>
           </label>
           <label className="flex items-center gap-2 cursor-pointer">
             <input
@@ -467,7 +586,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
               onChange={(e) => setInStock(e.target.checked)}
               className="w-4 h-4 rounded accent-brand-green"
             />
-            <span className="text-sm text-brand-cream/70">In Stock</span>
+            <span className="text-sm text-brand-cream/70">{t("admin.form.inStock")}</span>
           </label>
           <label className="flex items-center gap-2 cursor-pointer">
             <input
@@ -476,7 +595,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
               onChange={(e) => setFeatured(e.target.checked)}
               className="w-4 h-4 rounded accent-brand-gold"
             />
-            <span className="text-sm text-brand-cream/70">Featured</span>
+            <span className="text-sm text-brand-cream/70">{t("admin.form.featuredLabel")}</span>
           </label>
         </div>
       </fieldset>
@@ -484,11 +603,11 @@ export function ProductForm({ product, mode }: ProductFormProps) {
       {/* SEO */}
       <fieldset className="space-y-4 rounded-xl border border-brand-ash/20 p-4">
         <legend className="text-sm font-medium text-brand-cream/70 px-2">
-          SEO (optional)
+          {t("admin.form.seo")}
         </legend>
 
         <div>
-          <label htmlFor="seoTitle" className={labelClass}>SEO Title</label>
+          <label htmlFor="seoTitle" className={labelClass}>{t("admin.form.seoTitle")}</label>
           <input
             id="seoTitle"
             type="text"
@@ -497,11 +616,11 @@ export function ProductForm({ product, mode }: ProductFormProps) {
             className={inputClass}
             placeholder="Custom page title for search engines"
           />
-          <p className="text-xs text-brand-cream/30 mt-1">Leave blank to use product name</p>
+          <p className="text-xs text-brand-cream/30 mt-1">{t("admin.form.seoTitleHint")}</p>
         </div>
 
         <div>
-          <label htmlFor="seoDescription" className={labelClass}>SEO Description</label>
+          <label htmlFor="seoDescription" className={labelClass}>{t("admin.form.seoDesc")}</label>
           <textarea
             id="seoDescription"
             value={seoDescription}
@@ -510,7 +629,7 @@ export function ProductForm({ product, mode }: ProductFormProps) {
             className={inputClass}
             placeholder="Custom meta description for search engines"
           />
-          <p className="text-xs text-brand-cream/30 mt-1">Leave blank to use short description</p>
+          <p className="text-xs text-brand-cream/30 mt-1">{t("admin.form.seoDescHint")}</p>
         </div>
       </fieldset>
 
@@ -522,17 +641,17 @@ export function ProductForm({ product, mode }: ProductFormProps) {
           className="px-6 py-2.5 rounded-xl bg-brand-green text-brand-black font-semibold text-sm hover:bg-brand-green/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {submitting
-            ? "Saving..."
+            ? t("admin.form.saving")
             : mode === "create"
-              ? "Create Product"
-              : "Save Changes"}
+              ? t("admin.form.create")
+              : t("admin.form.saveChanges")}
         </button>
-        <a
+        <Link
           href="/admin"
           className="px-6 py-2.5 rounded-xl bg-brand-smoke text-brand-cream/70 text-sm hover:bg-brand-ash/50 transition-colors"
         >
-          Cancel
-        </a>
+          {t("admin.form.cancel")}
+        </Link>
       </div>
     </form>
   );

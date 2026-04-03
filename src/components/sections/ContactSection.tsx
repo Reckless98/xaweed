@@ -191,7 +191,7 @@ export function ContactSection() {
                   allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  className="rounded-xl border-0 min-h-[400px]"
+                  className="rounded-xl border-0 min-h-100"
                 />
               </div>
             </GlassCard>

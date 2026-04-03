@@ -4,7 +4,7 @@ import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useI18n } from "@/lib/i18n";
-import { loginWithMagicLink } from "../actions";
+import { loginWithMagicLink, loginWithPassword } from "../actions";
 
 function LoginForm() {
   const searchParams = useSearchParams();
@@ -16,7 +16,9 @@ function LoginForm() {
     unauthorized: t("admin.login.unauthorized"),
   };
 
+  const [mode, setMode] = useState<"magic" | "password">("magic");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "sent" | "error">(
     urlError ? "error" : "idle"
   );
@@ -24,7 +26,7 @@ function LoginForm() {
     urlError ? URL_ERRORS[urlError] ?? "An error occurred." : ""
   );
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleMagicLink(e: React.FormEvent) {
     e.preventDefault();
     setStatus("loading");
     setErrorMsg("");
@@ -39,6 +41,23 @@ function LoginForm() {
       setErrorMsg(result.error);
     } else {
       setStatus("sent");
+    }
+  }
+
+  async function handlePassword(e: React.FormEvent) {
+    e.preventDefault();
+    setStatus("loading");
+    setErrorMsg("");
+
+    const formData = new FormData();
+    formData.set("email", email);
+    formData.set("password", password);
+
+    const result = await loginWithPassword(formData);
+
+    if (result?.error) {
+      setStatus("error");
+      setErrorMsg(result.error);
     }
   }
 
@@ -77,14 +96,67 @@ function LoginForm() {
               {" "}{t("admin.login.clickToSign")}
             </p>
           </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-4">
+        ) : mode === "password" ? (
+          <form onSubmit={handlePassword} className="space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm text-brand-cream/70 mb-1.5">
                 {t("admin.login.email")}
               </label>
               <input
                 id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="admin@xaweed.com"
+                required
+                autoFocus
+                className="w-full px-4 py-3 rounded-xl bg-brand-charcoal border border-brand-ash/20 text-brand-ivory placeholder:text-brand-cream/30 focus:outline-none focus:border-brand-green/40 transition-colors"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="password" className="block text-sm text-brand-cream/70 mb-1.5">
+                {t("admin.login.password")}
+              </label>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+                className="w-full px-4 py-3 rounded-xl bg-brand-charcoal border border-brand-ash/20 text-brand-ivory placeholder:text-brand-cream/30 focus:outline-none focus:border-brand-green/40 transition-colors"
+              />
+            </div>
+
+            {status === "error" && (
+              <p className="text-red-400 text-sm">{errorMsg}</p>
+            )}
+
+            <button
+              type="submit"
+              disabled={status === "loading"}
+              className="w-full py-3 rounded-xl bg-brand-green text-brand-black font-semibold hover:bg-brand-green/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {status === "loading" ? t("admin.login.signingIn") : t("admin.login.signIn")}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => { setMode("magic"); setStatus("idle"); setErrorMsg(""); }}
+              className="w-full text-center text-brand-cream/40 text-sm hover:text-brand-green/70 transition-colors"
+            >
+              {t("admin.login.useMagicLink")}
+            </button>
+          </form>
+        ) : (
+          <form onSubmit={handleMagicLink} className="space-y-4">
+            <div>
+              <label htmlFor="email-magic" className="block text-sm text-brand-cream/70 mb-1.5">
+                {t("admin.login.email")}
+              </label>
+              <input
+                id="email-magic"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -105,6 +177,14 @@ function LoginForm() {
               className="w-full py-3 rounded-xl bg-brand-green text-brand-black font-semibold hover:bg-brand-green/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {status === "loading" ? t("admin.login.sending") : t("admin.login.sendLink")}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => { setMode("password"); setStatus("idle"); setErrorMsg(""); }}
+              className="w-full text-center text-brand-cream/40 text-sm hover:text-brand-green/70 transition-colors"
+            >
+              {t("admin.login.usePassword")}
             </button>
           </form>
         )}

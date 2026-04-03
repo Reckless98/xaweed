@@ -31,6 +31,50 @@ export async function loginWithMagicLink(formData: FormData) {
   return { success: true };
 }
 
+export async function loginWithPassword(formData: FormData) {
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
+  if (!email) return { error: "Email is required" };
+  if (!password) return { error: "Password is required" };
+
+  if (!isAllowedAdminEmail(email)) {
+    return { error: "Unauthorized email address" };
+  }
+
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  if (!adminPassword) {
+    return { error: "Password login is not configured" };
+  }
+
+  if (password !== adminPassword) {
+    return { error: "Invalid password" };
+  }
+
+  // Password correct — use admin API to generate a magic link token
+  // and verify it immediately to create a session (bypasses email rate limits)
+  const adminClient = createAdminClient();
+  const { data, error: linkError } = await adminClient.auth.admin.generateLink({
+    type: "magiclink",
+    email,
+  });
+
+  if (linkError || !data?.properties?.hashed_token) {
+    return { error: linkError?.message ?? "Failed to create session" };
+  }
+
+  const supabase = await createClient();
+  const { error: verifyError } = await supabase.auth.verifyOtp({
+    token_hash: data.properties.hashed_token,
+    type: "magiclink",
+  });
+
+  if (verifyError) {
+    return { error: verifyError.message };
+  }
+
+  redirect("/admin");
+}
+
 export async function logout() {
   const supabase = await createClient();
   await supabase.auth.signOut();

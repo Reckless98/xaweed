@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { getSiteUrl, isAllowedAdminEmail } from "@/lib/env";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -11,15 +12,13 @@ export async function loginWithMagicLink(formData: FormData) {
   const email = formData.get("email") as string;
   if (!email) return { error: "Email is required" };
 
-  const adminEmail = process.env.ADMIN_EMAIL;
-  if (adminEmail && email !== adminEmail) {
+  if (!isAllowedAdminEmail(email)) {
     return { error: "Unauthorized email address" };
   }
 
   const supabase = await createClient();
 
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const siteUrl = getSiteUrl();
 
   const { error } = await supabase.auth.signInWithOtp({
     email,
@@ -73,8 +72,7 @@ async function requireAdmin() {
   if (!user) throw new Error("Not authenticated");
 
   // Enforce admin email at the action level (defense in depth)
-  const adminEmail = process.env.ADMIN_EMAIL;
-  if (adminEmail && user.email !== adminEmail) {
+  if (!isAllowedAdminEmail(user.email)) {
     throw new Error("Unauthorized");
   }
 

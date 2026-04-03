@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { isAllowedAdminEmail } from "@/lib/env";
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
@@ -46,8 +47,7 @@ export async function updateSession(request: NextRequest) {
     }
 
     // Check admin email
-    const adminEmail = process.env.ADMIN_EMAIL;
-    if (adminEmail && user.email !== adminEmail) {
+    if (!isAllowedAdminEmail(user.email)) {
       const url = request.nextUrl.clone();
       url.pathname = "/admin/login";
       url.searchParams.set("error", "unauthorized");

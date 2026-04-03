@@ -243,13 +243,22 @@ export async function uploadProductImage(formData: FormData) {
     return { error: "File too large. Max 5MB" };
   }
 
-  const ext = file.name.split(".").pop();
-  const fileName = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+  // Compress to WebP (quality 80, max 1200px wide) — ~70% smaller files
+  const sharp = (await import("sharp")).default;
+  const buffer = Buffer.from(await file.arrayBuffer());
+  const compressed = await sharp(buffer)
+    .resize(1200, 1200, { fit: "inside", withoutEnlargement: true })
+    .webp({ quality: 80 })
+    .toBuffer();
+
+  const fileName = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.webp`;
   const filePath = `products/${fileName}`;
 
   const { error } = await admin.storage
     .from("product-images")
-    .upload(filePath, file);
+    .upload(filePath, compressed, {
+      contentType: "image/webp",
+    });
 
   if (error) return { error: error.message };
 

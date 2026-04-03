@@ -12,6 +12,7 @@ export interface Product {
   tags: string[];
   featured: boolean;
   inStock: boolean;
+  isActive?: boolean;
   lineInquiryText: string;
   strain?: StrainType;
   thcContent?: string;
@@ -20,6 +21,10 @@ export interface Product {
   code?: string;
   brand?: string;
   priceOptions?: { label: string; price: number }[];
+  seoTitle?: string;
+  seoDescription?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export type StrainType = "sativa" | "indica" | "hybrid";
@@ -65,6 +70,7 @@ export interface FAQ {
 export interface ContactInfo {
   phone: string;
   lineId: string;
+  instagram: string;
   address: string;
   addressThai: string;
   googleMapsUrl: string;

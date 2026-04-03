@@ -2,12 +2,19 @@
 
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { products, categories } from "@/data/products";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { useI18n } from "@/lib/i18n";
-import type { ProductCategory } from "@/types";
+import type { Product, Category, ProductCategory } from "@/types";
 
-export function ProductsPageContent() {
+interface ProductsPageContentProps {
+  products: Product[];
+  categories: Category[];
+}
+
+export function ProductsPageContent({
+  products,
+  categories,
+}: ProductsPageContentProps) {
   const [active, setActive] = useState<ProductCategory | "all">("all");
   const [search, setSearch] = useState("");
   const { t, locale } = useI18n();

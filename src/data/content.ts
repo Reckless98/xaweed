@@ -86,6 +86,7 @@ export const brandStory: BrandStory = {
 export const contactInfo: ContactInfo = {
   phone: "0659156189",
   lineId: "@688ndwgr",
+  instagram: "xaweed_shop",
   address:
     "Nonthaburi Pakkred 25/460, Soi Si Chai Thong 23, Bang Talat, Pak Kret, Nonthaburi 11120",
   addressThai:

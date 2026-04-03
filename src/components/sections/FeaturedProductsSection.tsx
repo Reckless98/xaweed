@@ -5,10 +5,14 @@ import { motion } from "framer-motion";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ProductCard } from "@/components/ui/ProductCard";
-import { featuredProducts } from "@/data/products";
 import { useI18n } from "@/lib/i18n";
+import type { Product } from "@/types";
 
-export function FeaturedProductsSection() {
+interface FeaturedProductsSectionProps {
+  products: Product[];
+}
+
+export function FeaturedProductsSection({ products: featuredProducts }: FeaturedProductsSectionProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);

@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { fadeInUp } from "@/lib/animations";
@@ -31,34 +32,36 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
       className="group relative"
     >
       <div className="glass rounded-2xl overflow-hidden transition-all duration-500 hover:shadow-glow hover:border-brand-green/10 border border-transparent">
-        {/* Image */}
-        <div className="relative aspect-square overflow-hidden bg-brand-charcoal">
-          <Image
-            src={product.image}
-            alt={product.name}
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="object-cover transition-transform duration-700 group-hover:scale-110"
-          />
-          <div className="absolute inset-0 bg-linear-to-t from-brand-black/60 via-transparent to-transparent" />
+        {/* Image — clickable to product detail */}
+        <Link href={`/products/${product.slug}`} className="block">
+          <div className="relative aspect-square overflow-hidden bg-brand-charcoal">
+            <Image
+              src={product.image}
+              alt={product.name}
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              className="object-cover transition-transform duration-700 group-hover:scale-110"
+            />
+            <div className="absolute inset-0 bg-linear-to-t from-brand-black/60 via-transparent to-transparent" />
 
-          {/* Badges */}
-          <div className="absolute top-3 left-3 flex gap-2">
-            {product.strain && (
-              <Badge variant={strainColors[product.strain] ?? "neutral"}>
-                {product.strain}
-              </Badge>
-            )}
-            {product.featured && <Badge variant="gold">{t("products.featured")}</Badge>}
-          </div>
+            {/* Badges */}
+            <div className="absolute top-3 left-3 flex gap-2">
+              {product.strain && (
+                <Badge variant={strainColors[product.strain] ?? "neutral"}>
+                  {product.strain}
+                </Badge>
+              )}
+              {product.featured && <Badge variant="gold">{t("products.featured")}</Badge>}
+            </div>
 
-          {/* Price overlay */}
-          <div className="absolute bottom-3 right-3">
-            <span className="glass-light px-3 py-1.5 rounded-lg text-sm font-bold text-brand-green">
-              {product.priceDisplay}
-            </span>
+            {/* Price overlay */}
+            <div className="absolute bottom-3 right-3">
+              <span className="glass-light px-3 py-1.5 rounded-lg text-sm font-bold text-brand-green">
+                {product.priceDisplay}
+              </span>
+            </div>
           </div>
-        </div>
+        </Link>
 
         {/* Content */}
         <div className="p-5">

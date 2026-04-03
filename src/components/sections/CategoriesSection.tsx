@@ -4,10 +4,14 @@ import { motion } from "framer-motion";
 import { staggerContainer } from "@/lib/animations";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { CategoryCard } from "@/components/ui/CategoryCard";
-import { categories } from "@/data/products";
 import { useI18n } from "@/lib/i18n";
+import type { Category } from "@/types";
 
-export function CategoriesSection() {
+interface CategoriesSectionProps {
+  categories: Category[];
+}
+
+export function CategoriesSection({ categories }: CategoriesSectionProps) {
   const { t } = useI18n();
 
   return (

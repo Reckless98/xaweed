@@ -143,6 +143,7 @@ const jsonLd = {
   sameAs: [
     "https://weed.th/shop/8ad27a23-8b7b-408e-92c8-a5eeea6e48cb/nonthaburi/xaweed-shop",
     "https://line.me/R/ti/p/@688ndwgr",
+    "https://www.instagram.com/xaweed_shop/",
   ],
   aggregateRating: {
     "@type": "AggregateRating",

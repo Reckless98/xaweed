@@ -13,8 +13,16 @@ import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
 import { LineCtaSection } from "@/components/sections/LineCtaSection";
 import { ContactSection } from "@/components/sections/ContactSection";
 import { LineFloatingButton } from "@/components/ui/LineFloatingButton";
+import { getFeaturedProducts, getCategories } from "@/lib/supabase/queries";
 
-export default function Home() {
+export const revalidate = 60;
+
+export default async function Home() {
+  const [featuredProducts, categories] = await Promise.all([
+    getFeaturedProducts(),
+    getCategories(),
+  ]);
+
   return (
     <IntroAnimation>
       <Navbar />
@@ -23,9 +31,9 @@ export default function Home() {
       <main>
         <HeroSection />
         <RastaDivider className="my-0" />
-        <FeaturedProductsSection />
+        <FeaturedProductsSection products={featuredProducts} />
         <RastaDivider className="my-0" />
-        <CategoriesSection />
+        <CategoriesSection categories={categories} />
         <RastaDivider className="my-0" />
         <AboutSection />
         <GallerySection />
